@@ -2,9 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 
-
 from .forms import PostForm
 from .models import Post, Group, User
+
 
 def index(request):
     post_list = Post.objects.order_by('-pub_date')
@@ -24,16 +24,17 @@ def group_posts(request, slug):
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    template = 'posts/group_list.html'    
-    context = {      
-        'group': group,        
-        'page_obj': page_obj,      
+    template = 'posts/group_list.html'
+    context = {
+        'group': group,
+        'page_obj': page_obj,
     }
     return render(request, template, context)
 
+
 def profile(request, username):
     author = get_object_or_404(User, username=username)
-    posts = Post.objects.filter(author=author).select_related('author', 'group').order_by('-pub_date')
+    posts = Post.objects.filter(author=author).select_related('group')
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -48,11 +49,11 @@ def profile(request, username):
 
 
 def post_detail(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)    
+    post = get_object_or_404(Post, pk=post_id)
     template = 'posts/post_detail.html'
     context = {
         'post': post
-    }    
+    }
     return render(request, template, context)
 
 
