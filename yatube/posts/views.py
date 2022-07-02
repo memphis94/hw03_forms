@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 
+
 from .forms import PostForm
 from .models import Post, Group, User
 
@@ -57,32 +58,37 @@ def post_detail(request, post_id):
 
 @login_required
 def post_create(request):
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save()
-            post.author = request.user
-            post.save()
-            return redirect('posts:profile', username=request.user)
-        template = 'posts/create_post.html'
-        context = {
-            'form': form,
-        }
-        return render(request, template, context)
+    groups = Group.objects.all()
+    form = PostForm(request.POST or None)
+    if form.is_valid():
+        post = form.save(commit=False)
+        post.author = request.user
+        post.save()
+        return redirect('posts:profile', username=post.author.username)
+    else:
+        print(form.errors)
+    template = 'posts/create_post.html'
+    context = {
+        'form': form,
+        'groups': groups,
+    }
+    return render(request, template, context)
 
 
 @login_required
 def post_edit(request, post_id):
-    post = get_object_or_404(Post, pk=post_id, author=request.user)
-    form = PostForm(request.POST)
-    if request.method == "POST":
-        if form.is_valid():
-            post = form.save()
-            post.save()
-            return redirect('posts:post_detail', post_id=post_id)
+    is_edit = True
+    post = get_object_or_404(Post, pk=post_id)
+    form = PostForm(request.POST or None, instance=post)
+    if form.is_valid():
+        template = 'posts:post_detail'
+        post.save()
+        return redirect(template, post_id=post.pk)
+    groups = Group.objects.all()
     template = 'posts/create_post.html'
     context = {
         'form': form,
-        'post': post,
+        'groups': groups,
+        'is_edit': is_edit
     }
     return render(request, template, context)

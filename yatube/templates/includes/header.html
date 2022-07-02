@@ -23,10 +23,14 @@
              href="{% url 'about:tech' %}"
           >Технологии</a>
         </li>       
-        {% if user.is_authenticated %}       
-        <li class="nav-item"> 
-          <a class="nav-link active" href="<!--  -->">Новая запись</a>
-        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">              
+          <a class="nav-link link-light 
+             {% if view_name  == 'posts:post_create' %}
+               active
+             {% endif %}"
+             href="{% url 'posts:post_create' %}"
+          >Новая запись</a>        
         <li class="nav-item">              
           <a class="nav-link link-light 
              {% if view_name  == 'users:password_reset_form' %}
