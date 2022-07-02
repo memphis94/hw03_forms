@@ -18,7 +18,7 @@
             {{ post.text|truncatewords:30 }}
         </p>
         <a href="{% url "posts:post_detail" post.pk %}">подробная информация </a>
-        {% if post.group != Null %}
+        {% if post.group %}
         <p><a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a></p>
         {% endif%}
     </article>
