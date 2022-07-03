@@ -71,7 +71,6 @@ def post_create(request):
 
 @login_required
 def post_edit(request, post_id):
-    is_edit = True
     post = get_object_or_404(Post, pk=post_id)
     form = PostForm(request.POST or None, instance=post)
     if request.user != post.author:
@@ -82,7 +81,6 @@ def post_edit(request, post_id):
         return redirect(template, post_id=post.pk)
     template = 'posts/create_post.html'
     context = {
-        'form': form,
-        'is_edit': is_edit
+        'form': form
     }
     return render(request, template, context)
