@@ -64,7 +64,7 @@ def post_create(request):
         return redirect('posts:profile', username=post.author.username)
     template = 'posts/create_post.html'
     context = {
-        'form': form,
+        'form': form
     }
     return render(request, template, context)
 
@@ -81,6 +81,7 @@ def post_edit(request, post_id):
         return redirect(template, post_id=post.pk)
     template = 'posts/create_post.html'
     context = {
-        'form': form
+        'form': form,
+        'is_edit': True
     }
     return render(request, template, context)

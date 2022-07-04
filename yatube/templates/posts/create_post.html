@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{% block title %}{% if not post %} Новый пост 
-  {% else %} Редактировать{% endif %}{% endblock %}
+{% block title %}{% if not is_edit %} Новый пост
+  {% else %} Редактировать {% endif %}{% endblock %}
 {% block content %}
 {% load user_filters %}
   <div class="container py-5">
@@ -8,7 +8,7 @@
       <div class="col-md-8 p-5">
         <div class="card">
           <div class="card-header">
-            {% if not post %}
+            {% if not is_edit %}
             Новый пост
             {% else %}
             Редактировать пост
@@ -30,7 +30,7 @@
             {% endfor %}
             {% endif %}            
             <form method="post" action="{% if post %}"
-              {% url 'posts:update_post' post_id=post.id %}" 
+              {% url 'posts:post_edit' post_id=post.id %}" 
               {% else %} "{% url 'posts:post_create' %}"
               {% endif %}">                        
               {% csrf_token %}
@@ -52,7 +52,7 @@
             {% endfor %}            
             <div class="col-md-6 offset-md-4">
               <button type="submit" class="btn btn-primary">
-                {% if post %}
+                {% if not is_edit %}
                   Сохранить
                 {% else %}
                   Добавить

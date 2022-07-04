@@ -25,12 +25,15 @@
               </li>
               <li class="list-group-item">
               <p><a href="{% url "posts:profile" username=post.author%}">все посты пользователя</a></p> 
-              </li>
-              <li class="list-group-item">
-                {% if user == post.author %}
-                  <a href="{% url 'posts:post_edit' post.id %}">Редактировать пост</a>
-                {% endif %}
+              </li>              
           </ul>
         </aside>
+        <article class="col-12 col-md-9">
+        {{post.text}}        
+          {% if user == post.author %}
+            <a href="{% url 'posts:post_edit' post_id=post.pk %}">Редактировать пост</a>
+          {% endif %}
+        
+      </article>
       </div>           
 {% endblock %}
